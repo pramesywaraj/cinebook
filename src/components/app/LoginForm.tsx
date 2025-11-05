@@ -32,7 +32,11 @@ function LoginForm() {
         try {
             window.location.href = '/';
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Login failed, please try again');
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : 'Login failed, please try again'
+            );
         } finally {
             setIsLoading(false);
         }
@@ -83,11 +87,7 @@ function LoginForm() {
                     </div>
                 )}
 
-                <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading}
-                >
+                <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? 'Logging in...' : 'Login'}
                 </Button>
             </form>
