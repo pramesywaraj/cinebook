@@ -17,14 +17,14 @@ const selectedStudio = MOCK_STUDIOS.find((studio) => studio.id === studioId);
 ---
 
 <MobileLayout
-    title="Select Seats"
+    title="CineBook - Select Seats"
     header="Select Seats"
     withBottomNav={false}
     withBack
 >
     <div class="space-y-1 mb-2">
-        <h2>{`You're selecting seats on ${selectedStudio?.name || '-'}`}</h2>
-        <p>{`Capacity: ${selectedStudio?.total_seats || 0}`}</p>
+        <h2>{`Select your seats for ${selectedStudio?.name || '-'}`}</h2>
+        <p>{`Total Capacity: ${selectedStudio?.total_seats || 0} seats`}</p>
     </div>
     <SeatMap client:load />
 </MobileLayout>

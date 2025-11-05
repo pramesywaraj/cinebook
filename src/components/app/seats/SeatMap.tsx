@@ -1,6 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+
 import { useSeats } from '@/lib/hooks/useSeats';
+
 import { Button } from '@/components/ui/Button';
+import BookConfirmationDialog, {
+    type BookConfirmationDialogHandle,
+} from '@/components/app/dialog/BookConfirmationDialog';
 
 import Seat from './Seat';
 
@@ -15,6 +20,7 @@ export default function SeatMap() {
         onSelectSeat,
         onClearSelection,
     } = useSeats();
+    const confirmDialogRef = useRef<BookConfirmationDialogHandle>(null);
 
     const legend = useMemo(
         () => [
@@ -28,7 +34,11 @@ export default function SeatMap() {
         []
     );
 
-    const onBookSeats = (ids: number[]) => {};
+    const onBookSeats = () => {
+        const selectedIds = selectedSeats.keys();
+
+        console.log('CHECK SELECTED SEATS', selectedIds);
+    };
 
     if (loading)
         return <p className="text-sm text-muted-foreground">Loading seats…</p>;
@@ -104,11 +114,16 @@ export default function SeatMap() {
                 <Button
                     type="button"
                     disabled={totalSelected === 0 || !!error}
-                    onClick={() => onBookSeats([])}
+                    onClick={() => confirmDialogRef?.current?.open()}
                 >
-                    Continue ({totalSelected})
+                    Confirm Seats ({totalSelected})
                 </Button>
             </div>
+
+            <BookConfirmationDialog
+                ref={confirmDialogRef}
+                onConfirm={onBookSeats}
+            />
         </div>
     );
 }
