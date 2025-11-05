@@ -1,0 +1,30 @@
+---
+import type { GetStaticPaths } from 'astro';
+import MobileLayout from '@/layouts/app.astro';
+import SeatMap from '@/components/app/seats/SeatMap';
+
+import { MOCK_STUDIOS } from '@/lib/__mock__/studio';
+
+export const getStaticPaths = (() => {
+    return MOCK_STUDIOS.map((s) => ({ params: { id: String(s.id) } }));
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const studioId = Number(id);
+if (Number.isNaN(studioId)) throw new Error('Invalid studio id');
+
+const selectedStudio = MOCK_STUDIOS.find((studio) => studio.id === studioId);
+---
+
+<MobileLayout
+    title="Select Seats"
+    header="Select Seats"
+    withBottomNav={false}
+    withBack
+>
+    <div class="space-y-1 mb-2">
+        <h2>{`You're selecting seats on ${selectedStudio?.name || '-'}`}</h2>
+        <p>{`Capacity: ${selectedStudio?.total_seats || 0}`}</p>
+    </div>
+    <SeatMap client:load />
+</MobileLayout>
