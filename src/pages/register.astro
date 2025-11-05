@@ -1,21 +1,20 @@
 ---
 import MobileLayout from '@/layouts/app.astro';
-import LoginForm from '@/components/app/form/LoginForm';
 ---
 
-<MobileLayout title="CineBook - Login">
+<MobileLayout title="CineBook - Register">
     <h1 class="text-2xl font-bold">CineBook</h1>
     <div class="flex flex-col justify-center flex-1 gap-6">
-        <h2>Login</h2>
-        <LoginForm client:load />
+        <h2>Register</h2>
+        <!-- <LoginForm client:load /> -->
         <div class="text-center text-sm">
             <p class="text-muted-foreground">
-                Don't have an account?{' '}
+                Have an account already?{' '}
                 <a
-                    href="/register"
+                    href="/login"
                     class="text-primary hover:underline font-medium"
                 >
-                    Sign up here 👋
+                    Sign in here 😁
                 </a>
             </p>
         </div>
