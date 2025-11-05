@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/Field';
 
 function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
