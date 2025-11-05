@@ -1,0 +1,43 @@
+import type { Booking } from '@/lib/schemas/booking';
+
+export const MOCK_BOOKINGS: Booking[] = [
+    {
+        id: 1,
+        booking_code: '550e8400-e29b-41d4-a716-446655440000',
+        user_id: 1,
+        user_name: 'John Doe',
+        user_email: 'user@example.com',
+        studio_id: 1,
+        seat_ids: [1, 2, 3],
+        qr_code: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+        booking_type: 'online',
+        status: 'used',
+        created_at: '2023-12-01T10:30:00Z',
+    },
+    {
+        id: 2,
+        booking_code: '660e8400-e29b-41d4-a716-446655440000',
+        user_id: 1,
+        user_name: 'John Doe',
+        user_email: 'user@example.com',
+        studio_id: 2,
+        seat_ids: [7],
+        qr_code: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+        booking_type: 'offline',
+        status: 'used',
+        created_at: '2023-11-20T08:10:00Z',
+    },
+    {
+        id: 3,
+        booking_code: '770e8400-e29b-41d4-a716-446655440000',
+        user_id: 1,
+        user_name: 'Jane Smith',
+        user_email: 'jane@example.com',
+        studio_id: 3,
+        seat_ids: [12, 13],
+        qr_code: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+        booking_type: 'online',
+        status: 'active',
+        created_at: '2023-11-10T12:00:00Z',
+    },
+];
