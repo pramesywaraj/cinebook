@@ -1,14 +1,21 @@
-import { type Studio } from '@/lib/schemas/studio';
 import StudioSearch from './StudioSearch';
 import StudioList from './StudioList';
 import useStudios from '@/lib/hooks/useStudios';
 
-type Props = {
-    data?: Studio[];
-};
+export default function StudioBrowser() {
+    const { query, setQuery, items, loading, error } = useStudios();
 
-export default function StudioBrowser({ data = [] }: Props) {
-    const { query, setQuery, items } = useStudios(data);
+    if (loading) {
+        return <div className="text-center py-4">Loading studios...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-4 text-red-500">
+                Error loading studios
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-4">
