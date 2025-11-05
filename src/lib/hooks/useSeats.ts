@@ -5,13 +5,21 @@ import { MOCK_SEATS } from '../__mock__/seats';
 
 const ROW_SIZE = 5;
 
+interface SelectedSeat {
+    id: number;
+    seat_number: string;
+}
+
 export function useSeats() {
     const [seats, setSeats] = useState<Seat[]>([]);
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState<string | null>(null);
-    const [selected, setSelected] = useState<Set<number>>(new Set());
+    const [selected, setSelected] = useState<Map<number, SelectedSeat>>(
+        new Map()
+    );
 
     const totalSelected = selected.size;
+    const selectedSeatNumbers = Array.from(selected.values());
 
     useEffect(() => {
         setLoading(true);
@@ -48,27 +56,35 @@ export function useSeats() {
         return chunks;
     }, [seats]);
 
-    const onSelectSeat = (id: number, available: boolean) => {
-        if (!available) return;
+    const onSelectSeat = (seat: Seat) => {
+        if (!seat.is_available) return;
 
         setSelected((prev) => {
-            const next = new Set(prev);
-            if (next.has(id)) next.delete(id);
-            else {
-                next.add(id);
-            }
+            const next = new Map(prev);
+            if (next.has(seat.id)) next.delete(seat.id);
+            else
+                next.set(seat.id, {
+                    id: seat.id,
+                    seat_number: seat.seat_number,
+                });
 
             return next;
         });
     };
 
+    const onClearSelection = () => {
+        setSelected(new Map());
+    };
+
     return {
         seats,
         rows,
-        selected,
+        selectedSeats: selected,
+        selectedSeatNumbers,
         totalSelected,
         loading,
         error: err,
         onSelectSeat,
+        onClearSelection,
     };
 }
