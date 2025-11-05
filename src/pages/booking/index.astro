@@ -6,5 +6,8 @@ const currentUserId = 1; // TODO: get from auth later
 ---
 
 <MobileLayout title="My Bookings - CineBook" header="My Bookings">
+    <div class="space-y-1 mb-4">
+        <p>Here are your recent bookings</p>
+    </div>
     <BookingList client:load userId={currentUserId} />
 </MobileLayout>
