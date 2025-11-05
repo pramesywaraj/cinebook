@@ -1,0 +1,10 @@
+---
+import BookingList from '@/components/app/booking/BookingList';
+import MobileLayout from '@/layouts/app.astro';
+
+const currentUserId = 1; // TODO: get from auth later
+---
+
+<MobileLayout title="My Bookings - CineBook" header="My Bookings">
+    <BookingList client:load userId={currentUserId} />
+</MobileLayout>

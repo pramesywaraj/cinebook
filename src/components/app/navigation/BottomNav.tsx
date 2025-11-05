@@ -12,10 +12,10 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     { href: '/', label: 'Home', icon: Home, match: (p) => p === '/' },
     {
-        href: '/bookings',
+        href: '/booking',
         label: 'My Bookings',
         icon: Ticket,
-        match: (p) => p.startsWith('/bookings'),
+        match: (p) => p.startsWith('/booking'),
     },
     {
         href: '/profile',
