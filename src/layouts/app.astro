@@ -3,6 +3,8 @@ import '@/styles/global.css';
 import '@fontsource-variable/public-sans';
 
 import BottomNav from '@/components/app/navigation/BottomNav';
+import Navbar from '@/components/app/navigation/Navbar';
+
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -11,6 +13,8 @@ interface Props {
     header?: string;
     withBottomNav?: boolean;
     containerClass?: string;
+    withBack?: boolean;
+    backHref?: string;
 }
 
 const {
@@ -19,6 +23,8 @@ const {
     header = '',
     withBottomNav = true,
     containerClass,
+    withBack = false,
+    backHref = '/',
 } = Astro.props;
 ---
 
@@ -38,15 +44,18 @@ const {
         <div class="max-w-sm mx-auto min-h-screen bg-white flex flex-col">
             {
                 header && (
-                    <div class="sticky top-0 z-50 bg-background border-b border-border flex items-center justify-between px-4 py-3">
-                        <h1 class="text-xl">{header}</h1>
-                    </div>
+                    <Navbar
+                        client:load
+                        title={header}
+                        withBack={withBack}
+                        backHref={backHref}
+                    />
                 )
             }
 
             <main
                 class={cn(
-                    'px-4 pt-6 pb-[calc(5rem+env(safe-area-inset-bottom))] flex-1 flex flex-col',
+                    `px-4 pt-6 ${withBottomNav ? 'pb-[calc(5rem+env(safe-area-inset-bottom))]' : 'pb-6'} flex-1 flex flex-col`,
                     containerClass
                 )}
             >
