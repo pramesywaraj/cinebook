@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { registerSchema, type RegisterFormData } from '@/lib/schemas/auth';
+import { useAuth } from '@/lib/hooks/useAuth';
+
 import { Field, FieldError, FieldLabel } from '@/components/ui/Field';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
 function RegisterForm() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { register, isLoading, error } = useAuth();
 
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -20,20 +22,11 @@ function RegisterForm() {
     });
 
     const onSubmit = async (data: RegisterFormData) => {
-        setIsLoading(true);
-        setError(null);
-
         try {
+            await register(data);
+
             window.location.href = '/';
-        } catch (err) {
-            setError(
-                err instanceof Error
-                    ? err.message
-                    : 'Login failed, please try again'
-            );
-        } finally {
-            setIsLoading(false);
-        }
+        } catch (err) {}
     };
 
     return (

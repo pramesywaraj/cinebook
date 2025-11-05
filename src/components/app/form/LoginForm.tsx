@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
+import { useAuth } from '@/lib/hooks/useAuth';
+
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
 import { Field, FieldError, FieldLabel } from '@/components/ui/Field';
 
 function LoginForm() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { login, isLoading, error } = useAuth();
 
     const form = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -20,20 +22,11 @@ function LoginForm() {
     });
 
     const onSubmit = async (data: LoginFormData) => {
-        setIsLoading(true);
-        setError(null);
-
         try {
+            await login(data);
+
             window.location.href = '/';
-        } catch (err) {
-            setError(
-                err instanceof Error
-                    ? err.message
-                    : 'Login failed, please try again'
-            );
-        } finally {
-            setIsLoading(false);
-        }
+        } catch (err) {}
     };
 
     return (
