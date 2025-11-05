@@ -1,0 +1,56 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = 'Admin Dashboard - Cinema Booking' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title} - Admin</title>
+    </head>
+    <body class="bg-background text-foreground">
+        <!-- Full-width desktop layout -->
+        <div class="flex min-h-screen">
+            <!-- Sidebar Navigation -->
+            <aside
+                class="w-64 bg-card border-r border-border sticky top-0 h-screen"
+            >
+                <div class="p-6 border-b border-border">
+                    <h1 class="text-xl font-bold">CinemaBook Admin</h1>
+                </div>
+                <nav class="p-4 space-y-2">
+                    <a
+                        href="/admin"
+                        class="block px-4 py-2 rounded-md hover:bg-accent"
+                        >Dashboard</a
+                    >
+                    <a
+                        href="/admin/bookings"
+                        class="block px-4 py-2 rounded-md hover:bg-accent"
+                        >Bookings</a
+                    >
+                    <a
+                        href="/admin/validate"
+                        class="block px-4 py-2 rounded-md hover:bg-accent"
+                        >Validate Tickets</a
+                    >
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 p-8">
+                <slot />
+            </main>
+        </div>
+    </body>
+</html>

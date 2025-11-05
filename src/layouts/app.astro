@@ -1,0 +1,62 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+    title: string;
+    description?: string;
+    isHeader?: boolean;
+}
+
+const {
+    title,
+    description = 'Cinema Booking App',
+    isHeader = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <meta name="description" content={description} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
+    </head>
+    <body class="bg-gray-100 text-foreground">
+        <div class="max-w-sm mx-auto min-h-screen bg-white flex flex-col">
+            {
+                isHeader && (
+                    <nav class="sticky top-0 z-50 bg-background border-b border-border">
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <a href="/" class="text-lg font-bold">
+                                CineBook
+                            </a>
+                            <div class="flex gap-4">
+                                <a href="/login" class="text-sm">
+                                    Login
+                                </a>
+                                <a href="/bookings" class="text-sm">
+                                    My Bookings
+                                </a>
+                            </div>
+                        </div>
+                    </nav>
+                )
+            }
+
+            <main class="px-4 py-6 flex-1">
+                <slot />
+            </main>
+
+            <footer
+                class="mt-auto px-4 py-4 border-t border-border text-center text-sm text-muted-foreground"
+            >
+                <p>&copy; 2024 CinemaBook. All rights reserved.</p>
+            </footer>
+        </div>
+    </body>
+</html>
