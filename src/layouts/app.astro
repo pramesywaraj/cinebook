@@ -6,6 +6,7 @@ import BottomNav from '@/components/app/navigation/BottomNav';
 import Navbar from '@/components/app/navigation/Navbar';
 
 import { cn } from '@/lib/utils';
+import RouteGuard from '@/components/app/auth/RouteGuard';
 
 interface Props {
     title: string;
@@ -41,6 +42,7 @@ const {
         <title>{title}</title>
     </head>
     <body class="bg-gray-100 text-foreground">
+        <RouteGuard client:load />
         <div class="max-w-sm mx-auto min-h-screen bg-white flex flex-col">
             {
                 header && (

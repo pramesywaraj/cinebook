@@ -1,4 +1,5 @@
 ---
+import RouteGuard from '@/components/app/auth/RouteGuard';
 import '@/styles/global.css';
 import '@fontsource-variable/public-sans';
 
@@ -20,6 +21,7 @@ const { title, description = 'Admin Dashboard - Cinema Booking' } = Astro.props;
         <title>{title} - Admin</title>
     </head>
     <body class="bg-background text-foreground">
+        <RouteGuard client:load />
         <!-- Full-width desktop layout -->
         <div class="flex min-h-screen">
             <!-- Sidebar Navigation -->

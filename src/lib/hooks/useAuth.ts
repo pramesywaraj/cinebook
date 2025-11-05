@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { registerUser, loginUser } from '@/lib/api/auth';
 import type { RegisterFormData, LoginFormData } from '@/lib/schemas/auth';
-import type { User } from '@/lib/schemas/user';
+import { UserRoleEnum, type User } from '@/lib/schemas/user';
 
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
@@ -84,6 +84,7 @@ export function useAuth() {
 
     return {
         ...state,
+        isAdmin: state.user?.role === UserRoleEnum.Enum.admin,
         isLoading,
         error,
         login,

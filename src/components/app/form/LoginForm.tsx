@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Field, FieldError, FieldLabel } from '@/components/ui/Field';
+import { UserRoleEnum } from '@/lib/schemas/user';
 
 function LoginForm() {
     const { login, isLoading, error } = useAuth();
@@ -23,9 +24,13 @@ function LoginForm() {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            await login(data);
+            const response = await login(data);
 
-            window.location.href = '/';
+            if (response.user.role === UserRoleEnum.Enum.admin) {
+                window.location.href = '/admin';
+            } else {
+                window.location.href = '/';
+            }
         } catch (err) {}
     };
 
