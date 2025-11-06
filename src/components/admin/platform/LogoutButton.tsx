@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -5,6 +6,11 @@ import { Button } from '@/components/ui/Button';
 
 export default function LogoutButton() {
     const { logout, user } = useAuth();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -14,8 +20,12 @@ export default function LogoutButton() {
     return (
         <div className="mt-auto p-4 border-t border-border">
             <div className="mb-2 px-2">
-                <p className="text-sm font-medium">{user?.name || 'Admin'}</p>
-                <p className="text-xs text-muted-foreground">{user?.email}</p>
+                <p className="text-sm font-medium">
+                    {mounted ? user?.name || 'Admin' : 'Admin'}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                    {mounted ? user?.email : ''}
+                </p>
             </div>
             <Button
                 variant="outline"
