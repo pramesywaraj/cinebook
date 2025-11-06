@@ -1,19 +1,14 @@
 ---
-import type { GetStaticPaths } from 'astro';
 import MobileLayout from '@/layouts/app.astro';
 import SeatMap from '@/components/app/seats/SeatMap';
 
-import { MOCK_STUDIOS } from '@/lib/__mock__/studio';
+// Get the studio ID from the URL parameter
+const studioId = Number(Astro.params.id);
 
-export const getStaticPaths = (() => {
-    return MOCK_STUDIOS.map((s) => ({ params: { id: String(s.id) } }));
-}) satisfies GetStaticPaths;
-
-const { id } = Astro.params;
-const studioId = Number(id);
-if (Number.isNaN(studioId)) throw new Error('Invalid studio id');
-
-const selectedStudio = MOCK_STUDIOS.find((studio) => studio.id === studioId);
+// Validate that we have a valid ID
+if (isNaN(studioId) || studioId <= 0) {
+    return Astro.redirect('/');
+}
 ---
 
 <MobileLayout
@@ -22,9 +17,5 @@ const selectedStudio = MOCK_STUDIOS.find((studio) => studio.id === studioId);
     withBottomNav={false}
     withBack
 >
-    <div class="space-y-1 mb-2">
-        <h2>{`Select your seats for ${selectedStudio?.name || '-'}`}</h2>
-        <p>{`Total Capacity: ${selectedStudio?.total_seats || 0} seats`}</p>
-    </div>
-    <SeatMap client:load />
+    <SeatMap client:load studioId={studioId} />
 </MobileLayout>

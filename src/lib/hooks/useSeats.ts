@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
-import { type Seat } from '@/lib/schemas/seat';
+import { SeatListSchema, type Seat } from '@/lib/schemas/seat';
 
-import { MOCK_SEATS } from '../__mock__/seats';
+import { apiFetchParsed } from '../api/client';
+import { API_ENDPOINT } from '../constants/api';
 
 const ROW_SIZE = 5;
 
@@ -10,9 +11,9 @@ interface SelectedSeat {
     seat_number: string;
 }
 
-export function useSeats() {
+export function useSeats(studioId: number) {
     const [seats, setSeats] = useState<Seat[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [err, setErr] = useState<string | null>(null);
     const [selected, setSelected] = useState<Map<number, SelectedSeat>>(
         new Map()
@@ -22,13 +23,38 @@ export function useSeats() {
     const selectedSeatNumbers = Array.from(selected.values());
 
     useEffect(() => {
-        setLoading(true);
-
-        setTimeout(() => {
-            setSeats(MOCK_SEATS);
+        if (!studioId) {
+            setErr('Studio ID is required');
             setLoading(false);
-        }, 1500);
-    }, []);
+            return;
+        }
+
+        setLoading(true);
+        setErr(null);
+
+        const controller = new AbortController();
+
+        apiFetchParsed(
+            API_ENDPOINT.CINEMA_STUDIOS_SEATS(studioId),
+            SeatListSchema,
+            { signal: controller.signal }
+        )
+            .then((data) => {
+                setSeats(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                if (error.name !== 'AbortError') {
+                    console.error('Failed to fetch seats:', error);
+                    setErr(error.message || 'Failed to load seats');
+                    setLoading(false);
+                }
+            });
+
+        return () => {
+            controller.abort();
+        };
+    }, [studioId]);
 
     // Group seats by seat number row divided by ROW_SIZE
     const rows = useMemo(() => {
@@ -82,6 +108,7 @@ export function useSeats() {
         selectedSeats: selected,
         selectedSeatNumbers,
         totalSelected,
+        studioName: seats.length > 0 ? seats[0].studio_name : '-',
         loading,
         error: err,
         onSelectSeat,

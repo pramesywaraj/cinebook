@@ -7,3 +7,21 @@ export async function fetchStudios(signal?: AbortSignal): Promise<Studio[]> {
         signal,
     });
 }
+
+export async function fetchStudio(
+    id: number,
+    signal?: AbortSignal
+): Promise<Studio> {
+    const studios = await apiFetchParsed(
+        API_ENDPOINT.CINEMA_STUDIOS,
+        StudioListSchema,
+        { signal }
+    );
+    const studio = studios.find((studio) => studio.id === id);
+
+    if (!studio) {
+        throw new Error(`Studio with id ${id} not found`);
+    }
+
+    return studio;
+}

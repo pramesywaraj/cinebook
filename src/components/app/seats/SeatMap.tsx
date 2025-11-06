@@ -1,25 +1,31 @@
 import { useMemo, useRef } from 'react';
-
 import { useSeats } from '@/lib/hooks/useSeats';
 
 import { Button } from '@/components/ui/Button';
+
 import BookConfirmationDialog, {
     type BookConfirmationDialogHandle,
 } from '@/components/app/dialog/BookConfirmationDialog';
 
 import Seat from './Seat';
 
-export default function SeatMap() {
+interface Props {
+    studioId: number;
+}
+
+export default function SeatMap({ studioId }: Props) {
     const {
+        seats,
         rows,
         loading,
+        studioName,
         selectedSeats,
         selectedSeatNumbers,
         totalSelected,
         error,
         onSelectSeat,
         onClearSelection,
-    } = useSeats();
+    } = useSeats(studioId);
     const confirmDialogRef = useRef<BookConfirmationDialogHandle>(null);
 
     const legend = useMemo(
@@ -36,8 +42,6 @@ export default function SeatMap() {
 
     const onBookSeats = () => {
         const selectedIds = selectedSeats.keys();
-
-        console.log('CHECK SELECTED SEATS', selectedIds);
     };
 
     if (loading)
@@ -46,6 +50,10 @@ export default function SeatMap() {
 
     return (
         <div className="flex-1 flex flex-col">
+            <div className="space-y-1 mb-2">
+                <h2>{`Select your seats for ${studioName}`}</h2>
+                <p>{`Total Capacity: ${seats.length || 0} seats`}</p>
+            </div>
             <div className="flex-1 flex flex-col gap-4 justify-center">
                 <div className="flex items-start gap-2">
                     <p className="text-sm text-muted-foreground">Selected:</p>
