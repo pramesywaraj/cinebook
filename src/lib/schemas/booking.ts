@@ -22,6 +22,8 @@ export const BookingSchema = z.object({
     created_at: z.string().datetime(),
 });
 
+export const BookingListSchema = z.array(BookingSchema);
+
 export const BookingOnlineSchema = z.object({
     studioId: z.number().int().positive(),
     seatIds: z.number().int().positive().array(),

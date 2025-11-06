@@ -1,32 +1,36 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 
 import type { Booking, BookingPayload } from '@/lib/schemas/booking';
-import { bookOnline } from '@/lib/api/booking';
-
-import { MOCK_BOOKINGS } from '@/lib/__mock__/booking';
+import { bookOnline, fetchBookings } from '@/lib/api/booking';
 
 export function useBookings(userId: number) {
     const [items, setItems] = useState<Booking[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState<string | null>(null);
 
     useEffect(() => {
-        setLoading(true);
+        setIsLoading(true);
         setErr(null);
 
-        const t = setTimeout(() => {
-            try {
-                const data = MOCK_BOOKINGS.filter((b) => b.user_id === userId);
-                setItems(data);
-            } catch (e) {
-                setErr('Failed to load bookings');
-            } finally {
-                setLoading(false);
-            }
-        }, 700);
+        const controller = new AbortController();
 
-        return () => clearTimeout(t);
-    }, [userId]);
+        fetchBookings(controller.signal)
+            .then((data) => {
+                setItems(data);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                if (error.name !== 'AbortError') {
+                    console.error('Failed to fetch bookings:', error);
+                    setErr(error.message || 'Failed to load bookings');
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
 
     const sorted = useMemo(
         () =>
@@ -40,7 +44,7 @@ export function useBookings(userId: number) {
 
     return {
         bookings: sorted,
-        loading,
+        isLoading,
         error: err,
     };
 }

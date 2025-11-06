@@ -3,14 +3,14 @@ import { useBookings } from '@/lib/hooks/useBooking';
 import BookingItem from './BookingItem';
 
 export default function BookingList({ userId }: { userId: number }) {
-    const { bookings, loading, error } = useBookings(userId);
+    const { bookings, isLoading, error } = useBookings(userId);
 
-    if (loading)
+    if (isLoading)
         return (
             <p className="text-sm text-muted-foreground">Loading bookings…</p>
         );
     if (error) return <p className="text-sm text-destructive">{error}</p>;
-    if (bookings.length === 0 && !loading)
+    if (bookings.length === 0 && !isLoading)
         return (
             <p className="text-sm text-muted-foreground">No bookings yet.</p>
         );

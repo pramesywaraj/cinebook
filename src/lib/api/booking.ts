@@ -1,7 +1,11 @@
-import type { Booking, BookingPayload } from '@/lib/schemas/booking';
+import {
+    BookingListSchema,
+    type Booking,
+    type BookingPayload,
+} from '@/lib/schemas/booking';
 import { API_ENDPOINT } from '@/lib/constants/api';
 
-import { apiFetch } from './client';
+import { apiFetch, apiFetchParsed } from './client';
 
 interface BookingOnlineResponse {
     booking: Booking;
@@ -17,6 +21,12 @@ export async function bookOnline(
             studioId: payload.studioId,
             seatIds: payload.seatIds,
         }),
+        signal,
+    });
+}
+
+export async function fetchBookings(signal?: AbortSignal): Promise<Booking[]> {
+    return apiFetchParsed(API_ENDPOINT.BOOKING_HISTORY, BookingListSchema, {
         signal,
     });
 }
