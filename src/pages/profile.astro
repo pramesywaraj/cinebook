@@ -1,0 +1,13 @@
+---
+import MobileLayout from '@/layouts/app.astro';
+import ProfileDetail from '@/components/app/profile/ProfileDetail';
+---
+
+<MobileLayout
+    title="Profile - CineBook"
+    header="Profile"
+    withBottomNav={true}
+    withBack={false}
+>
+    <ProfileDetail client:load />
+</MobileLayout>
