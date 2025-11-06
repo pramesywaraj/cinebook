@@ -22,6 +22,13 @@ export const BookingSchema = z.object({
     created_at: z.string().datetime(),
 });
 
+export const BookingOnlineSchema = z.object({
+    studioId: z.number().int().positive(),
+    seatIds: z.number().int().positive().array(),
+});
+
 export type Booking = z.infer<typeof BookingSchema>;
 export type BookingType = z.infer<typeof BookingTypeEnum>;
 export type BookingStatus = z.infer<typeof BookingStatusEnum>;
+
+export type BookingPayload = z.infer<typeof BookingOnlineSchema>;

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
-import type { Booking } from '@/lib/schemas/booking';
+import type { Booking, BookingPayload } from '@/lib/schemas/booking';
+import { bookOnline } from '@/lib/api/booking';
 
 import { MOCK_BOOKINGS } from '@/lib/__mock__/booking';
 
@@ -41,5 +42,38 @@ export function useBookings(userId: number) {
         bookings: sorted,
         loading,
         error: err,
+    };
+}
+
+export function useBookingOnline() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const createBooking = useCallback(async (payload: BookingPayload) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await bookOnline(payload);
+            return response.booking;
+        } catch (err) {
+            const message =
+                err instanceof Error ? err.message : 'Failed to create booking';
+            setError(message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const reset = useCallback(() => {
+        setError(null);
+    }, []);
+
+    return {
+        isLoading: loading,
+        error,
+        createBooking,
+        reset,
     };
 }

@@ -8,6 +8,7 @@ import BookConfirmationDialog, {
 } from '@/components/app/dialog/BookConfirmationDialog';
 
 import Seat from './Seat';
+import { useBookingOnline } from '@/lib/hooks/useBooking';
 
 interface Props {
     studioId: number;
@@ -26,6 +27,12 @@ export default function SeatMap({ studioId }: Props) {
         onSelectSeat,
         onClearSelection,
     } = useSeats(studioId);
+    const {
+        isLoading: isBookingLoading,
+        error: bookingError,
+        createBooking,
+    } = useBookingOnline();
+
     const confirmDialogRef = useRef<BookConfirmationDialogHandle>(null);
 
     const legend = useMemo(
@@ -40,8 +47,23 @@ export default function SeatMap({ studioId }: Props) {
         []
     );
 
-    const onBookSeats = () => {
-        const selectedIds = selectedSeats.keys();
+    const onBookSeats = async () => {
+        if (totalSelected === 0) return;
+
+        try {
+            const seatIds = Array.from(selectedSeats.keys());
+
+            await createBooking({
+                studioId,
+                seatIds,
+            });
+
+            confirmDialogRef.current?.close();
+
+            window.location.replace(`/booking/`);
+        } catch (error) {
+            console.error('Booking failed:', error);
+        }
     };
 
     if (loading)
@@ -113,7 +135,9 @@ export default function SeatMap({ studioId }: Props) {
                 <Button
                     type="button"
                     variant="secondary"
-                    disabled={totalSelected === 0 || !!error}
+                    disabled={
+                        totalSelected === 0 || !!error || isBookingLoading
+                    }
                     onClick={onClearSelection}
                 >
                     Clear Selection
@@ -122,6 +146,7 @@ export default function SeatMap({ studioId }: Props) {
                 <Button
                     type="button"
                     disabled={totalSelected === 0 || !!error}
+                    isLoading={isBookingLoading}
                     onClick={() => confirmDialogRef?.current?.open()}
                 >
                     Confirm Seats ({totalSelected})
