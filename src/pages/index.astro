@@ -4,9 +4,5 @@ import MobileLayout from '@/layouts/app.astro';
 ---
 
 <MobileLayout title="Home - CineBook" header="CineBook" containerClass="gap-4">
-    <div class="flex flex-col gap-2">
-        <h1 class="text-2xl font-bold">Hello, John Doe 👋</h1>
-        <p>Browse your favorite studio and book your seats now!</p>
-    </div>
     <StudioBrowser client:load />
 </MobileLayout>
