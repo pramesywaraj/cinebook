@@ -1,13 +1,32 @@
-import type { Booking } from '@/lib/schemas/booking';
 import { formatUtc } from '@/lib/date';
+import { useBookingDetail } from '@/lib/hooks/useBooking';
 
 import { StatusBadge, TypeBadge } from './BookingBadge';
 
 interface Props {
-    booking: Booking;
+    bookingId: number;
 }
 
-export default function BookingDetail({ booking }: Props) {
+export default function BookingDetail({ bookingId }: Props) {
+    const { booking, seatNumbers, isLoading, error } =
+        useBookingDetail(bookingId);
+
+    if (isLoading) {
+        return (
+            <p className="text-sm text-muted-foreground">Loading booking…</p>
+        );
+    }
+
+    if (error || !booking) {
+        return (
+            <div className="space-y-4">
+                <p className="text-sm text-destructive">
+                    {error || 'Booking not found'}
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-4">
             <section className="rounded-lg border p-4 space-y-2">
@@ -36,7 +55,9 @@ export default function BookingDetail({ booking }: Props) {
                     <div>
                         <p className="text-sm font-medium">Seats</p>
                         <p className="text-xs text-muted-foreground">
-                            {booking.seat_ids.join(', ')}
+                            {seatNumbers.length > 0
+                                ? seatNumbers.join(', ')
+                                : booking.seat_ids.join(', ')}
                         </p>
                     </div>
                     <div>

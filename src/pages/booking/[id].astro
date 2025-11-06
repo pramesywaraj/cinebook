@@ -1,29 +1,18 @@
 ---
-import type { GetStaticPaths } from 'astro';
-
 import MobileLayout from '@/layouts/app.astro';
 
 import BookingDetail from '@/components/app/booking/BookingDetail';
 
-import { MOCK_BOOKINGS } from '@/lib/__mock__/booking';
-
-export const getStaticPaths = (() => {
-    return MOCK_BOOKINGS.map((b) => ({ params: { id: String(b.id) } }));
-}) satisfies GetStaticPaths;
-
 const { id } = Astro.params;
 const bookingId = Number(id);
 if (Number.isNaN(bookingId)) throw new Error('Invalid booking id');
-
-const booking = MOCK_BOOKINGS.find((b) => b.id === bookingId);
-if (!booking) throw new Error('Booking not found');
 ---
 
 <MobileLayout
-    title={`Booking #${booking.id} - CineBook`}
-    header={`Booking #${booking.id}`}
+    title={`Booking #${id} - CineBook`}
+    header={`Booking #${id}`}
     withBack
     withBottomNav={false}
 >
-    <BookingDetail client:load booking={booking} />
+    <BookingDetail client:load bookingId={bookingId} />
 </MobileLayout>
