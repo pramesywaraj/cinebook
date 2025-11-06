@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        PUBLIC_API_BASE_URL: ${PUBLIC_API_BASE_URL:-http://localhost:3000/api}
+    image: cinebook:latest
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PUBLIC_API_BASE_URL=${PUBLIC_API_BASE_URL:-http://localhost:3000/api}
+      - PORT=4321
+      - HOST=0.0.0.0
+    ports:
+      - "8500:4321" # Changed from 6969:4321 to 8500:4321
+    restart: unless-stopped
