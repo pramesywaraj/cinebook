@@ -1,5 +1,6 @@
 import { apiFetchParsed } from '@/lib/api/client';
 import { StudioListSchema, type Studio } from '@/lib/schemas/studio';
+import { SeatListSchema, type Seat } from '@/lib/schemas/seat';
 import { API_ENDPOINT } from '../constants/api';
 
 export async function fetchStudios(signal?: AbortSignal): Promise<Studio[]> {
@@ -24,4 +25,15 @@ export async function fetchStudio(
     }
 
     return studio;
+}
+
+export async function fetchStudioSeats(
+    studioId: number,
+    signal?: AbortSignal
+): Promise<Seat[]> {
+    return apiFetchParsed(
+        API_ENDPOINT.CINEMA_STUDIOS_SEATS(studioId),
+        SeatListSchema,
+        { signal }
+    );
 }

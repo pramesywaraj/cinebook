@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
-import { SeatListSchema, type Seat } from '@/lib/schemas/seat';
+import { type Seat } from '@/lib/schemas/seat';
 
-import { apiFetchParsed } from '../api/client';
-import { API_ENDPOINT } from '../constants/api';
+import { fetchStudioSeats } from '@/lib/api/studio';
 
 const ROW_SIZE = 5;
 
@@ -34,11 +33,7 @@ export function useSeats(studioId: number) {
 
         const controller = new AbortController();
 
-        apiFetchParsed(
-            API_ENDPOINT.CINEMA_STUDIOS_SEATS(studioId),
-            SeatListSchema,
-            { signal: controller.signal }
-        )
+        fetchStudioSeats(studioId, controller.signal)
             .then((data) => {
                 setSeats(data);
                 setLoading(false);
