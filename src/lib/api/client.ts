@@ -2,6 +2,18 @@ import { z } from 'zod/v3';
 import { PUBLIC_API_BASE_URL } from 'astro:env/client';
 
 const BASE_URL = PUBLIC_API_BASE_URL;
+const TOKEN_KEY = 'auth_token';
+
+// Helper function to get auth token from localStorage
+function getAuthToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(TOKEN_KEY);
+}
+
+export interface ApiFetchOptions extends RequestInit {
+    signal?: AbortSignal;
+    skipAuth?: boolean; // Skip including auth token
+}
 
 export class ApiError extends Error {
     status: number;
@@ -15,14 +27,25 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(
     path: string,
-    init?: RequestInit & { signal?: AbortSignal }
+    init?: ApiFetchOptions
 ): Promise<T> {
+    const { skipAuth = false, ...fetchInit } = init || {};
+
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        ...((fetchInit.headers as Record<string, string>) || {}),
+    };
+
+    if (!skipAuth) {
+        const token = getAuthToken();
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+    }
+
     const res = await fetch(`${BASE_URL}${path}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...(init?.headers || {}),
-        },
-        ...init,
+        ...fetchInit,
+        headers,
     });
 
     const contentType = res.headers.get('content-type') || '';
@@ -42,7 +65,7 @@ export async function apiFetch<T>(
 export async function apiFetchParsed<T>(
     path: string,
     schema: z.ZodSchema<T>,
-    init?: RequestInit & { signal?: AbortSignal }
+    init?: ApiFetchOptions
 ) {
     const data = await apiFetch<unknown>(path, init);
     return schema.parse(data);

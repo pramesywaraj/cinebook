@@ -21,6 +21,7 @@ export async function registerUser(
             password: payload.password,
         }),
         signal,
+        skipAuth: true,
     });
 }
 
@@ -32,5 +33,6 @@ export async function loginUser(payload: LoginFormData, signal?: AbortSignal) {
             password: payload.password,
         }),
         signal,
+        skipAuth: true,
     });
 }
