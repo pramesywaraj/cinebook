@@ -36,9 +36,34 @@ export const BookingOfflineSchema = z.object({
     customerEmail: z.string().email('Invalid email address'),
 });
 
+export const QRCodeDataSchema = z.object({
+    bookingCode: z.string().uuid(),
+    seatIds: z.array(z.number().int().positive()),
+    studioId: z.number().int().positive(),
+    timestamp: z.string().datetime(),
+    userId: z.number().int().positive(),
+});
+
+export const ValidationBookingSchema = z.object({
+    bookingCode: z.string().uuid(),
+    bookingType: BookingTypeEnum,
+    customerName: z.string().min(1),
+    seatIds: z.array(z.number().int().positive()).nonempty(),
+    studioId: z.number().int().positive(),
+});
+
+export const ValidationResponseSchema = z.object({
+    booking: ValidationBookingSchema,
+    valid: z.boolean(),
+});
+
 export type Booking = z.infer<typeof BookingSchema>;
 export type BookingType = z.infer<typeof BookingTypeEnum>;
 export type BookingStatus = z.infer<typeof BookingStatusEnum>;
 
 export type BookingPayload = z.infer<typeof BookingOnlineSchema>;
 export type BookingOfflinePayload = z.infer<typeof BookingOfflineSchema>;
+
+export type QRCodeData = z.infer<typeof QRCodeDataSchema>;
+export type ValidationBooking = z.infer<typeof ValidationBookingSchema>;
+export type ValidationResponse = z.infer<typeof ValidationResponseSchema>;

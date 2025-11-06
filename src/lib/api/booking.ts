@@ -3,6 +3,8 @@ import {
     type Booking,
     type BookingPayload,
     type BookingOfflinePayload,
+    type ValidationResponse,
+    ValidationResponseSchema,
 } from '@/lib/schemas/booking';
 import { API_ENDPOINT } from '@/lib/constants/api';
 
@@ -45,4 +47,19 @@ export async function fetchBookings(signal?: AbortSignal): Promise<Booking[]> {
     return apiFetchParsed(API_ENDPOINT.BOOKING_HISTORY, BookingListSchema, {
         signal,
     });
+}
+
+export async function validateBooking(
+    bookingCode: string,
+    signal?: AbortSignal
+): Promise<ValidationResponse> {
+    return apiFetchParsed(
+        API_ENDPOINT.BOOKING_VALIDATE,
+        ValidationResponseSchema,
+        {
+            method: 'POST',
+            body: JSON.stringify({ bookingCode }),
+            signal,
+        }
+    );
 }

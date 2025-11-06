@@ -7,4 +7,6 @@ export const API_ENDPOINT = {
     BOOKING_ONLINE: '/booking/online',
     BOOKING_OFFLINE: '/booking/offline',
     BOOKING_HISTORY: '/booking/my-bookings',
+
+    BOOKING_VALIDATE: '/booking/validate',
 };
