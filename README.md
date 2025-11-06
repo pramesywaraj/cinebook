@@ -176,32 +176,56 @@ See the [backend repository](https://github.com/gcode/cinema-booking) for comple
 
 ### Project Structure
 
-cinebook/
-├── src/
-│ ├── components/ # React components
-│ │ ├── admin/ # Admin-specific components
-│ │ ├── app/ # Customer-facing components
-│ │ └── ui/ # Reusable UI components
-│ ├── layouts/ # Astro layouts
-│ │ ├── admin.astro # Admin layout
-│ │ └── app.astro # Customer app layout
-│ ├── lib/ # Utilities and business logic
-│ │ ├── api/ # API client functions
-│ │ ├── hooks/ # React hooks
-│ │ ├── schemas/ # Zod schemas
-│ │ └── constants/ # Constants and configuration
-│ ├── pages/ # Astro pages (routes)
-│ │ ├── admin/ # Admin pages
-│ │ ├── booking/ # Booking pages
-│ │ └── studio/ # Studio pages
-│ └── styles/ # Global styles
-├── public/ # Static assets
-├── dist/ # Build output (generated)
-├── Dockerfile # Docker image configuration
-├── docker-compose.yaml # Docker Compose configuration
-├── astro.config.mjs # Astro configuration
-├── package.json # Dependencies and scripts
-└── tsconfig.json # TypeScript configuration
+- **cinebook/**
+    - **src/**
+        - **components/** - React components
+            - **admin/** - Admin-specific components
+                - `booking/` - AdminBooking.tsx, BookingSuccessDialog.tsx
+                - `platform/` - LogoutButton.tsx
+                - `validate/` - QRScanner.tsx, ValidateQR.tsx
+            - **app/** - Customer-facing components
+                - `auth/` - RouteGuard.tsx
+                - `booking/` - BookingBadge.tsx, BookingDetail.tsx, BookingItem.tsx, BookingList.tsx
+                - `dialog/` - BookConfirmationDialog.tsx
+                - `form/` - LoginForm.tsx, RegisterForm.tsx
+                - `navigation/` - BottomNav.tsx, Navbar.tsx
+                - `profile/` - ProfileDetail.tsx
+                - `seats/` - Seat.tsx, SeatMap.tsx
+                - `studio/` - StudioBrowser.tsx, StudioItem.tsx, StudioList.tsx, StudioSearch.tsx
+            - **ui/** - Reusable UI components (Button, Card, Dialog, Field, Input, Label, Select, etc.)
+        - **layouts/** - Astro layouts
+            - `admin.astro` - Admin layout wrapper
+            - `app.astro` - Customer app layout wrapper
+        - **lib/** - Utilities and business logic
+            - `__mock__/` - Mock data (booking.ts, seats.ts, studio.ts)
+            - `api/` - API client functions (auth.ts, booking.ts, client.ts, studio.ts)
+            - `constants/` - Constants and configuration (api.ts, booking.ts, routes.ts)
+            - `hooks/` - React hooks (useAuth, useBooking, useDebounce, useSeats, useStudios)
+            - `schemas/` - Zod schemas (auth, booking, seat, studio, user)
+            - `date.ts` - Date utility functions
+            - `utils.ts` - General utility functions
+        - **pages/** - Astro pages (routes)
+            - `admin/` - Admin pages (booking.astro, index.astro, validate.astro)
+            - `booking/` - Booking pages ([id].astro, index.astro)
+            - `studio/` - Studio pages ([id].astro)
+            - `index.astro` - Home page
+            - `login.astro` - Login page
+            - `profile.astro` - User profile page
+            - `register.astro` - Registration page
+        - **styles/** - Global styles
+            - `global.css` - Global CSS styles
+    - **public/** - Static assets (favicon.svg)
+    - **dist/** - Build output (generated, not committed)
+    - Configuration files:
+        - `.env` - Environment variables
+        - `astro.config.mjs` - Astro configuration
+        - `components.json` - shadcn/ui components config
+        - `docker-compose.yaml` - Docker Compose configuration
+        - `Dockerfile` - Docker image configuration
+        - `eslint.config.js` - ESLint configuration
+        - `package.json` - Dependencies and scripts
+        - `pnpm-lock.yaml` - pnpm lock file
+        - `tsconfig.json` - TypeScript configuration
 
 ### Environment Variables
 
