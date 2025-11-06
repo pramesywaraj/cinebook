@@ -162,6 +162,44 @@ See the [backend repository](https://github.com/gcode/cinema-booking) for comple
 
     The application will be available at `http://localhost:8500`
 
+## 🔐 Admin Access
+
+To test admin features (box office booking, QR validation, etc.), you need to create a user with admin role in the database.
+
+### Creating an Admin User
+
+1. **Connect to your PostgreSQL database** (where the backend stores user data)
+
+2. **Insert an admin user directly**:
+
+    ```sql
+    INSERT INTO users (name, email, password, role, created_at, updated_at)
+    VALUES (
+        'Admin User',
+        'admin@example.com',
+        '$2a$10$hashed_password_here',  -- Use bcrypt hash of your password
+        'admin',
+        NOW(),
+        NOW()
+    );
+    ```
+
+    **Note**: Replace `$2a$10$hashed_password_here` with a bcrypt hash of your desired password.
+
+3. **Alternative method** (if you already have a registered user):
+
+    ```sql
+    UPDATE users SET role = 'admin' WHERE email = 'your-email@example.com';
+    ```
+
+4. **Login with the admin credentials** at `/login` to access the admin dashboard at `/admin`.
+
+**Note**: Password must be hashed using bcrypt. You can generate a hash using:
+
+- The backend's password hashing utility
+- Online bcrypt generators (for development only)
+- Or use the registration endpoint and then update the role
+
 ## 🔧 Development
 
 ### Available Scripts
