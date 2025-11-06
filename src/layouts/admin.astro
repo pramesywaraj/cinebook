@@ -1,5 +1,7 @@
 ---
 import RouteGuard from '@/components/app/auth/RouteGuard';
+import LogoutButton from '@/components/admin/platform/LogoutButton';
+
 import '@/styles/global.css';
 import '@fontsource-variable/public-sans';
 
@@ -48,6 +50,7 @@ const { title, description = 'Admin Dashboard - Cinema Booking' } = Astro.props;
                         >Validate Tickets</a
                     >
                 </nav>
+                <LogoutButton client:load />
             </aside>
 
             <!-- Main Content Area -->
