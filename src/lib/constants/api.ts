@@ -5,5 +5,6 @@ export const API_ENDPOINT = {
     CINEMA_STUDIOS_SEATS: (id: number) => `/cinema/studios/${id}/seats`,
 
     BOOKING_ONLINE: '/booking/online',
+    BOOKING_OFFLINE: '/booking/offline',
     BOOKING_HISTORY: '/booking/my-bookings',
 };

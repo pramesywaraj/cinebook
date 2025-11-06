@@ -29,8 +29,16 @@ export const BookingOnlineSchema = z.object({
     seatIds: z.number().int().positive().array(),
 });
 
+export const BookingOfflineSchema = z.object({
+    studioId: z.number().int().positive(),
+    seatIds: z.number().int().positive().array(),
+    customerName: z.string().min(2, 'Name must be at least 2 characters'),
+    customerEmail: z.string().email('Invalid email address'),
+});
+
 export type Booking = z.infer<typeof BookingSchema>;
 export type BookingType = z.infer<typeof BookingTypeEnum>;
 export type BookingStatus = z.infer<typeof BookingStatusEnum>;
 
 export type BookingPayload = z.infer<typeof BookingOnlineSchema>;
+export type BookingOfflinePayload = z.infer<typeof BookingOfflineSchema>;

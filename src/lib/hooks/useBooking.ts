@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 
-import type { Booking, BookingPayload } from '@/lib/schemas/booking';
-import { bookOnline, fetchBookings } from '@/lib/api/booking';
+import type {
+    Booking,
+    BookingOfflinePayload,
+    BookingPayload,
+} from '@/lib/schemas/booking';
+import { bookOffline, bookOnline, fetchBookings } from '@/lib/api/booking';
 import { fetchStudioSeats } from '@/lib/api/studio';
 
-export function useBookings(userId: number) {
+export function useBookings() {
     const [items, setItems] = useState<Booking[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState<string | null>(null);
@@ -70,6 +74,44 @@ export function useBookingOnline() {
             setLoading(false);
         }
     }, []);
+
+    const reset = useCallback(() => {
+        setError(null);
+    }, []);
+
+    return {
+        isLoading: loading,
+        error,
+        createBooking,
+        reset,
+    };
+}
+
+export function useBookingOffline() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const createBooking = useCallback(
+        async (payload: BookingOfflinePayload) => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await bookOffline(payload);
+                return response;
+            } catch (err) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to create booking';
+                setError(message);
+                throw err;
+            } finally {
+                setLoading(false);
+            }
+        },
+        []
+    );
 
     const reset = useCallback(() => {
         setError(null);
